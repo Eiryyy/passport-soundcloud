@@ -82,6 +82,7 @@ vows.describe('SoundCloudStrategy').addBatch({
         assert.equal(profile.provider, 'soundcloud');
         assert.equal(profile.id, '3207');
         assert.equal(profile.displayName, 'Johannes Wagener');
+        assert.equal(profile.username, 'Johannes Wagener');
       },
       'should set raw property' : function(err, profile) {
         assert.isString(profile._raw);
