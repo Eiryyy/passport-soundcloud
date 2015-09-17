@@ -1,11 +1,10 @@
 var vows = require('vows');
 var assert = require('assert');
-var util = require('util');
 var SoundCloudStrategy = require('passport-soundcloud/strategy');
 
 
 vows.describe('SoundCloudStrategy').addBatch({
-  
+
   'strategy': {
     topic: function() {
       return new SoundCloudStrategy({
@@ -14,12 +13,12 @@ vows.describe('SoundCloudStrategy').addBatch({
       },
       function() {});
     },
-    
+
     'should be named soundcloud': function (strategy) {
       assert.equal(strategy.name, 'soundcloud');
     },
   },
-  
+
   'strategy when loading user profile': {
     topic: function() {
       var strategy = new SoundCloudStrategy({
@@ -27,7 +26,7 @@ vows.describe('SoundCloudStrategy').addBatch({
         clientSecret: 'secret'
       },
       function() {});
-      
+
       // mock
       strategy._oauth2.get = function(url, accessToken, callback) {
         var body = '{ \
@@ -56,25 +55,25 @@ vows.describe('SoundCloudStrategy').addBatch({
           "private_playlists_count": 3, \
           "primary_email_confirmed": true \
         }';
-        
+
         callback(null, body, undefined);
       }
-      
+
       return strategy;
     },
-    
+
     'when told to load user profile': {
       topic: function(strategy) {
         var self = this;
         function done(err, profile) {
           self.callback(err, profile);
         }
-        
+
         process.nextTick(function () {
           strategy.userProfile('access-token', done);
         });
       },
-      
+
       'should not error' : function(err, req) {
         assert.isNull(err);
       },
@@ -92,7 +91,7 @@ vows.describe('SoundCloudStrategy').addBatch({
       },
     },
   },
-  
+
   'strategy when loading user profile and encountering an error': {
     topic: function() {
       var strategy = new SoundCloudStrategy({
@@ -100,27 +99,27 @@ vows.describe('SoundCloudStrategy').addBatch({
         clientSecret: 'secret'
       },
       function() {});
-      
+
       // mock
       strategy._oauth2.get = function(url, accessToken, callback) {
         callback(new Error('something-went-wrong'));
       }
-      
+
       return strategy;
     },
-    
+
     'when told to load user profile': {
       topic: function(strategy) {
         var self = this;
         function done(err, profile) {
           self.callback(err, profile);
         }
-        
+
         process.nextTick(function () {
           strategy.userProfile('access-token', done);
         });
       },
-      
+
       'should error' : function(err, req) {
         assert.isNotNull(err);
       },
@@ -132,5 +131,5 @@ vows.describe('SoundCloudStrategy').addBatch({
       },
     },
   },
-  
+
 }).export(module);
